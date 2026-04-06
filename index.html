@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Assessment List</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-brand">
+        <span class="brand-icon">⬡</span>
+        Assessment List
+      </div>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" class="active">Assessments</a></li>
+      <li><a href="#">Competency Master</a></li>
+      <li><a href="#">Case Studies</a></li>
+      <li><a href="#">Instructions</a></li>
+      <li><a href="#">Feedback</a></li>
+      <li><a href="#">User Mapping</a></li>
+      <li><a href="#">Hike per Level</a></li>
+      <li><a href="#">Results</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="nav-user">
+        <div class="user-avatar">DP</div>
+        <div class="user-info">
+          <span class="user-name">John P.</span>
+          <span class="user-role">Administrator</span>
+        </div>
+        <div class="user-dropdown">
+          <a href="#">Change Password</a>
+          <hr/>
+          <a href="#" class="sign-out-link">Sign out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="breadcrumb">Dashboard / <span>Assessments</span></div>
+        <h1 class="page-title">Assessments</h1>
+      </div>
+      <button class="btn-primary" id="openModal">
+        <span class="btn-icon">+</span> Create Assessment
+      </button>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-value" id="statTotal">8</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-value stat-active" id="statActive">5</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-value stat-inactive" id="statInactive">3</div>
+        <div class="stat-label">Inactive</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search-input" id="searchInput" type="text" placeholder="Search by name, description…" />
+        <button class="search-clear" id="searchClear" title="Clear">✕</button>
+      </div>
+      <div class="toolbar-right">
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="inactive">Inactive</button>
+        </div>
+        <select class="select-sort" id="sortSelect">
+          <option value="id-asc">Sort: # Asc</option>
+          <option value="id-desc">Sort: # Desc</option>
+          <option value="name-asc">Name A–Z</option>
+          <option value="name-desc">Name Z–A</option>
+          <option value="date-asc">Date Oldest</option>
+          <option value="date-desc">Date Newest</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table class="assessments-table" id="assessmentsTable">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-name sortable" data-col="name">
+              Name <span class="sort-arrow">↕</span>
+            </th>
+            <th class="col-date sortable" data-col="date">
+              Date <span class="sort-arrow">↕</span>
+            </th>
+            <th class="col-desc">Description</th>
+            <th class="col-status">Status</th>
+            <th class="col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Rows injected by JS -->
+        </tbody>
+      </table>
+
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">No assessments found</div>
+        <div class="empty-sub">Try adjusting your search or filter.</div>
+      </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-bar" id="paginationBar">
+      <span class="pagination-info" id="paginationInfo"></span>
+      <div class="pagination-controls" id="paginationControls"></div>
+    </div>
+
+  </main>
+
+  <!-- CREATE / EDIT MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">📝</div>
+          <h2 id="modalTitle">Create Assessment</h2>
+        </div>
+        <button class="modal-close" id="closeModal" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="assessName">Name <span class="required">*</span></label>
+            <input type="text" id="assessName" placeholder="Enter assessment name" autocomplete="off"/>
+            <span class="field-error" id="nameError"></span>
+          </div>
+          <div class="form-group">
+            <label for="assessDate">Date <span class="required">*</span></label>
+            <input type="date" id="assessDate"/>
+            <span class="field-error" id="dateError"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="assessDesc">Description</label>
+          <textarea id="assessDesc" rows="3" placeholder="Enter a short description…"></textarea>
+        </div>
+        <div class="form-group form-row-inline">
+          <label class="toggle-label" for="assessActive">
+            <div class="toggle-wrap">
+              <input type="checkbox" id="assessActive" class="toggle-input"/>
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </div>
+            Mark as Active
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelModal">Cancel</button>
+        <button class="btn-primary" id="submitAssessment">
+          <span id="submitLabel">Create</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE MODAL -->
+  <div class="modal-overlay" id="confirmOverlay">
+    <div class="modal modal-sm" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-danger">🗑</div>
+          <h2>Delete Assessment</h2>
+        </div>
+        <button class="modal-close" id="closeConfirm">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text">Are you sure you want to delete <strong id="confirmName"></strong>? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelConfirm">Cancel</button>
+        <button class="btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
